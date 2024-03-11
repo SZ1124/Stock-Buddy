@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+    <header>
+        <h1>Stock Buddy</h1>
+    </header>
+
+    <div class="Tabs">
+        <nav>
+            <ul>
+                <li><a><button type = "button" onclick="location.href = '/checkBalance'"> Account</button></a></li>
+                
+                <div class="dropdown">
+                    <li><a><button type = "button" class="dropbtn"> Tools </button>
+                        <div class="dropdown-content">
+                            <a href="/interestCalc.html">Interest Calculator</a>
+                            <a href="/mortgageCalc.html">Mortgage Calculator</a>
+                            <a href="/stockVolumeCalc.html">Stock Volume Calculator</a>
+                        </div>
+                    </a></li>
+                </div>
+                
+                <li><a><button type = "button" onclick="location.href = '/news'"> News</button></a></li>
+                <li><a><button type = "button" onclick="location.href = '/stocks'"> Stocks</button></a></li>
+                <li><a><button type = "button" onclick="location.href = '/portfolio'"> Portfolio</button></a></li>
+                <li><a><button type = "button" onclick="location.href = '/logout'"> Log out</button></a></li>
+                
+            </ul>
+        </nav>
+    </div>
+    <a class="twitter-timeline" href="https://twitter.com/StockBuddySFU?ref_src=twsrc%5Etfw">Tweets by StockBuddySFU</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div class="grid-container">
+        <section class="CurrentCumulativeTotal" >
+            <h3>Current Cumulative Total: </h3>
+            <p th:text="${'$'+ user.balance}"></p>
+            <p>Interested in Growing Your Wealth?</p>
+            <p>Use our <button class="innerButton" type = "button" onclick="location.href = '/interestCalc.html'">Interest Calculator</button> to consider your growing your wealth by putting money in a Savings Account or GIC </p>
+            <p><button class="innerButton"type = "button" onclick="location.href = '/stocks'">Click Here</button> to look at stocks</p>
+
+
+        </section>
+
+        <section class="Goals" >
+            
+            <button class="innerButtonHeader" type = "button" onclick="location.href = '/goals.html'"><h4>Goals</h4></button><br>
+            <table>
+                <tr>
+                    <th>Item:</th>
+                    <th>Cost:</th>
+                    <th>Estimated time until goal is reached (months):</th>
+                </tr>
+                <tr th:each="goals:${gs}">
+                    <td th:text="${goals.item}"></td>
+                    <td th:text="${'$' + goals.amount}"></td>
+                    <td th:text="${goals.time}"></td>
+                    <td>
+                        <form th:action="@{/deleteGoal/{gid}(gid=${goals.gid})}" method="get">
+                            <input class="btn btn-primary" type="submit" value="REMOVE"></input>
+                        </form>
+                    </td>
+                </tr>
+           </table>
+        </section>
+        
+        <section class="MajorHeadlines">
+            <h3>Major Headlines</h3>
+
+            <div class="news" th:each="article, stat : ${headlines}" th:if="${stat.count <= 2}">
+    
+                <h2 th:text="${article.title}"></h2>
+            
+                <p><strong>Author:</strong> <span th:text="${article.author}"></span></p>
+            
+                <p><strong>Source:</strong> <span th:text="${article.source.name}"></span></p>
+            
+                <p th:text="${article.description}"></p>
+            
+                <p><strong>URL:</strong> <a th:href="${article.url}" th:text="link" th:target="_blank"></a></p>
+                
+                <p><strong>Published At:</strong> <span th:text="${article.publishedAt}"></span></p>
+            
+        </section>
+
+        <section class="Stock">
+            <h3>Stocks</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stock Symbol</th>
+                        <th>Current Price</th>
+                        <th>Profit/Loss</th>
+                        <th>Open Price</th>
+                        <th>Previous Close Price</th>
+                        <th>Day's Price Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${portfolio}">
+                        <td th:text="${item.stock.symbol}"></td>
+                        <td th:text="${item.quote.c}"></td>
+                        <td th:text="${(item.quote.c - item.stock.purchasePrice) * item.stock.quantity}"></td>
+                        <td th:text="${item.quote.o}"></td>
+                        <td th:text="${item.quote.pc}"></td>
+                        <td th:text="${item.quote.dp}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="MonthlyBalance"  >
+            <h3>Monthly Balance:</h3>
+            <h2 th:text="${'$' + user.monthlysavings}"></h2>
+        </div>
+    </div>
+
+    
+
+    <!-- for help, contact, copyright -->
+    <div class="Footer">
+        <nav>
+            <ul>
+                <li><a><button type = "button" onclick="location.href = '/help.html'">Help</button></a></li>
+                <li><a><button type = "button" onclick="location.href = '/contacts.html'">Contact</button></a></li>
+                <li><a><button type = "button" onclick="location.href ='/privacypolicy.html'">Privacy Policy</button></a></li>
+                <li><a>©️ 2023 Summer CMPT276 D200 Group 9</a></li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
